@@ -1,0 +1,9 @@
+*.elf
+*.3dsx
+*.smdh
+*.o
+*.map
+build/
+data/*.bin
+*.pyc
+.DS_Store
