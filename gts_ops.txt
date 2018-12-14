@@ -1,0 +1,5 @@
+0001  search    req: hdr+8  rep: 0x128 ??
+0002  trade     ??  j'arrive pas
+0004  deposit   req: hdr+136 (pk4 chiffre)
+0005  ??        vu 2 fois, jamais decode
+0007  result    ?  j'crois

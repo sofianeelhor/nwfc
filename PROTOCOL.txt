@@ -1,0 +1,82 @@
+notes brutes. ca vaut ce que ca vaut. si vous avez des captures
+qui contredisent, ouvrez une issue.
+
+
+02/10/18
+--------
+
+gpcm.gs.nintendowifi.net:29900
+
+  le client envoie ca en premier :
+
+    \login\\challenge\1234567890\response\<32 hex>\str\
+
+  le response c'est md5(challenge + password), en hex lowercase.
+  le password fait 10 octets et je le mettrai pas la, cherchez.
+
+  si ok :
+
+    \lc\2\id\1\final\
+
+  sinon le client se casse direct.
+
+  apres le login il envoie \ka\ toutes les ~45s. si on repond pas
+  il coupe au bout d'une minute ou deux.
+
+  le \lt\ c'est la presence. 32 octets je crois, le premier octet
+  c'est le statut. j'ai que des morceaux, c'est du pif.
+
+
+14/10/18
+--------
+
+nas.nintendowifi.net /ac
+
+  POST, body commence par un 0x00 puis du base64.
+  jamais decode. on renvoie 0x00 0x00 + 32 octets + 8 octets
+  et le client prend le truc comme un token.
+  byte 0 de la reponse est toujours 0x00 sur les captures.
+
+  -> le token part dans le \login\ du gpcm, champ "token".
+
+  j'ai pas compris a quoi sert le base64 en entree. une jour.
+
+
+17/11/18
+
+  login gpcm, capture 12 (bw) :
+
+    5c 6c 6f 67 69 6e 5c 5c 63 68 61 6c 6c 65 6e 67   \login\\challeng
+    65 5c 39 34 37 31 38 32 30 33 36 35 5c 72 65 73   e\9471820365\res
+    70 6f 6e 73 65 5c 61 31 62 32 63 33 34 35 36      ponse\a1b2c3456
+
+  le challenge fait toujours 10 chiffres. toujours.
+
+
+28/10/18
+--------
+
+gpsp -> gts
+
+  header 16 octets. 4 champs u32 LE ? le 3e ressemble a un opcode
+  mais en u16, donc c'est ptet un u16 + un u16 de padding.
+
+  op 0x0001 = search
+  op 0x0002 = trade   <- j'arrive pas a le faire marcher, a revoir
+  op 0x0004 = deposit
+
+  op 0x0004 : apres les 16 octets y'a un pk4 complet (136 octets),
+  chiffre. voir pk4.py pour le dechiffrement.
+
+
+10/12/18
+
+  la taille de la reponse du 0x0001 : j'ai 0x128 sur certaines
+  captures et 0x128 + 4 sur d'autres. pas sur. a confirmer avec
+  plus de pcaps.
+
+  gen5 (bw/b2w2) : pas touche. meme structure a priori mais
+  j'ai zero capture propre, tout ce que j'ai c'est du gen4.
+
+  le 0x0005 je l'ai vu 2 fois dans un pcap de hgss, jamais reussi
+  a le rejouer.
